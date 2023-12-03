@@ -1,0 +1,14 @@
+galaxy_info:
+  role_name: ansible_role_lighthouse
+  namespace: smutosey
+  author: Nedorezov Alexander
+  description: Ansible Role for Lighthouse installation
+  license: MIT
+  min_ansible_version: "2.11"
+
+
+dependencies:
+  - name: nginx
+    src: git@github.com:nginxinc/ansible-role-nginx.git
+    version: "0.24.2"
+    scm: git
