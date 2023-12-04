@@ -1,5 +1,5 @@
 ---
-- name: LIGHTHOUSE | Reload nginx config
+- name: HANDLER | Reload nginx config
   ansible.builtin.service:
     name: nginx
     state: reloaded

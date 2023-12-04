@@ -1,5 +1,5 @@
 ---
-- name: LIGHTHOUSE | Create bin and data directory
+- name: INSTALL | Create bin and data directory
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -7,13 +7,13 @@
   loop:
     - { path: "{{ lighthouse_location }}", mode: '0755'}
 
-- name: LIGHTHOUSE | Get from source
+- name: INSTALL | Get from source
   ansible.builtin.git:
     repo: "{{ lighthouse_vcs }}"
     version: master
     dest: "{{ lighthouse_location }}"
 
-- name: LIGHTHOUSE | Create Lighthouse config
+- name: INSTALL | Create Lighthouse config
   become: true
   ansible.builtin.template:
     src: templates/lighthouse.conf.j2
