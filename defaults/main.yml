@@ -1,2 +1,2 @@
 ---
-lighthouse_location: /var/www/lighthouse
+role_lighthouse_location: /var/www/lighthouse

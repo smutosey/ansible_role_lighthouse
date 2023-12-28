@@ -11,16 +11,16 @@ Requirements
 Role Variables
 --------------
 
-| Scope | Variable | Default | Description |
-| ---- |---- | ---- | ---- |
-| defaults | lighthouse_location | /var/www/lighthouse | Расположение файлов сервера Lighthouse |
-| vars | lighthouse_vcs | https://github.com/VKCOM/lighthouse.git | Ссылка на git-репозиторий |
+| Scope    | Variable                 | Default                                 | Description                            |
+|----------|--------------------------|-----------------------------------------|----------------------------------------|
+| defaults | role_lighthouse_location | /var/www/lighthouse                     | Расположение файлов сервера Lighthouse |
+| vars     | role_lighthouse_vcs      | https://github.com/VKCOM/lighthouse.git | Ссылка на git-репозиторий              |
 
 Dependencies
 ------------
 
-| Role | Source | Description |
-| ---- | ---- | ---- |
+| Role           | Source                                         | Description                                                   |
+|----------------|------------------------------------------------|---------------------------------------------------------------|
 | nginxinc.nginx | git@github.com:nginxinc/ansible-role-nginx.git | Роль для инсталляции Nginx, необходим для запуска веб-сервера |
 
 Example Playbook

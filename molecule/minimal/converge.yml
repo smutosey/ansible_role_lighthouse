@@ -1,0 +1,5 @@
+- name: Converge
+  hosts: lighthouse
+  gather_facts: true
+  roles:
+    - role: ansible_role_lighthouse
