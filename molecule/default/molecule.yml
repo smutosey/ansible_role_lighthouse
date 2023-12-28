@@ -1,8 +1,9 @@
 ---
-# dependency:
-#   name: galaxy
-#   options:
-#     requirements-file: collections.yml
+dependency:
+  name: galaxy
+  options:
+    requirements-file: molecule/resources/collections.yml
+    role-file: molecule/resources/requirements.yml
 driver:
   name: docker
 lint: |
@@ -14,7 +15,7 @@ platforms:
     groups:
       - lighthouse
     image: ubuntu:22.04
-    dockerfile: ./Dockerfile.j2
+    dockerfile: ../resources/Dockerfile.j2
     privileged: true
     cgroupns_mode: host
     volumes:
@@ -25,7 +26,7 @@ platforms:
     groups:
       - lighthouse
     image: centos:7
-    dockerfile: ./Dockerfile.j2
+    dockerfile: ../resources/Dockerfile.j2
     privileged: true
     cgroupns_mode: host
     volumes:
@@ -34,5 +35,8 @@ platforms:
 
 provisioner:
   name: ansible
+  playbooks:
+    converge: ../resources/converge.yml
+    verify:  ../resources/verify.yml
 verifier:
   name: ansible
