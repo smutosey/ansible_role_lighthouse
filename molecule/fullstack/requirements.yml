@@ -10,7 +10,7 @@ roles:
     version: "1.13"
     name: ansible_role_clickhouse
 
-  - src: https://github.com/nginxinc/smutosey/ansible_role_vector.git
+  - src: https://github.com/smutosey/ansible_role_vector.git
     scm: git
     version: "1.0"
     name: ansible_role_vector
