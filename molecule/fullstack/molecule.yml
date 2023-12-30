@@ -13,10 +13,10 @@ lint: |
   ansible-lint . --exclude ./.tox/ --exclude ./.git/
 platforms:
 
-  - name: fullstack_centos
+  - name: fullstack_ubuntu
     groups:
       - fullstack
-    image: centos:7
+    image: ubuntu:22.04
     dockerfile: ../resources/Dockerfile.j2
     privileged: true
     cgroupns_mode: host
