@@ -1,0 +1,42 @@
+---
+- name: Verify
+  hosts: fullstack
+  tasks:
+    - name: 'Gather Local Services'
+      ansible.builtin.service_facts:
+      become: true
+
+    - name: 'Assert Clickhouse Service'
+      ansible.builtin.assert:
+        that:
+          - "'{{ clickhouse_service }}' in ansible_facts.services"
+          - "'running' == ansible_facts.services[clickhouse_service].state"
+          - "'enabled' == ansible_facts.services[clickhouse_service].status"
+          - "'{{ vector_service }}' in ansible_facts.services"
+          - "'running' == ansible_facts.services[vector_service].state"
+          - "'enabled' == ansible_facts.services[vector_service].status"
+          - "'{{ nginx_service }}' in ansible_facts.services"
+          - "'running' == ansible_facts.services[nginx_service].state"
+          - "'enabled' == ansible_facts.services[nginx_service].status"
+      vars:
+        clickhouse_service: 'clickhouse-server.service'
+        vector_service: 'vector.service'
+        nginx_service: 'nginx.service'
+
+    - name: 'Gather list of existing databases'
+      ansible.builtin.command: "clickhouse-client -h 127.0.0.1 --port {{ clickhouse_tcp_port }} -q 'show databases'"
+      changed_when: false
+      register: databases
+      vars:
+        clickhouse_tcp_port: 9000
+
+    - name: 'Assert Test Databases'
+      ansible.builtin.assert:
+        that:
+          - 'logs' in databases.stdout
+
+    - name: Check Vector API (GET /health status 200)
+      ansible.builtin.uri:
+        url: "http://0.0.0.0:{{ role_vector_port }}/health"
+      vars:
+        role_vector_port: 8686

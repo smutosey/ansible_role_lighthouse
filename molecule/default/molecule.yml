@@ -2,8 +2,8 @@
 dependency:
   name: galaxy
   options:
-    requirements-file: molecule/resources/collections.yml
-    role-file: molecule/resources/requirements.yml
+    requirements-file: molecule/shared/collections.yml
+    role-file: molecule/shared/requirements.yml
 driver:
   name: docker
 lint: |
@@ -36,7 +36,7 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    converge: ../resources/converge.yml
-    verify:  ../resources/verify.yml
+    converge: ../shared/converge.yml
+    verify:  ../shared/verify.yml
 verifier:
   name: ansible

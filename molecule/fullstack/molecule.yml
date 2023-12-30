@@ -3,29 +3,30 @@ dependency:
   name: galaxy
   options:
     requirements-file: molecule/shared/collections.yml
-    role-file: molecule/shared/requirements.yml
+    role-file: molecule/fullstack/requirements.yml
 driver:
-  name: podman
+  name: docker
 lint: |
   set -e
+  pwd
+  ls -lha
   ansible-lint . --exclude ./.tox/ --exclude ./.git/
 platforms:
 
-  - name: ubuntu_lighthouse
+  - name: fullstack_centos
     groups:
-      - lighthouse
-    image: ubuntu:22.04
+      - fullstack
+    image: centos:7
     dockerfile: ../resources/Dockerfile.j2
     privileged: true
     cgroupns_mode: host
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    command: /sbin/init
+    command: /usr/sbin/init
 
 provisioner:
   name: ansible
-  playbooks:
-    converge: ../shared/converge.yml
-    verify:  ../shared/verify.yml
+  options:
+    D: True
 verifier:
   name: ansible

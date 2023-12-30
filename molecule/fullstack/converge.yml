@@ -1,0 +1,108 @@
+- name: Converge
+  hosts: fullstack
+  gather_facts: true
+#   tasks:
+#     - name: install clickhouse
+#       block:
+#         - include_role:
+#             name: ansible_role_clickhouse
+#           vars:
+#             clickhouse_dbs_default:
+#               - name: logs
+#             clickhouse_networks_default:
+#               - "::/0"
+#               - "127.0.0.1"
+#             clickhouse_version: "22.3.3.44"
+#             clickhouse_listen_host_default:
+#               - "::"
+#       rescue:
+# #         - name: 'Gather config clickhouse'
+# #           ansible.builtin.command: "cat /etc/clickhouse-server/config.xml"
+# #           become: true
+# #           register: config
+# #         - name: 'Output /etc/clickhouse-server/config.xml clickhouse'
+# #           ansible.builtin.debug:
+# #             var: config.stdout_lines
+# #
+# #         - name: 'Gather config clickhouse'
+# #           ansible.builtin.command: "cat /etc/clickhouse-server/config.d/config.xml"
+# #           become: true
+# #           register: config
+# #         - name: 'Output /etc/clickhouse-server/config.d/config.xml clickhouse'
+# #           ansible.builtin.debug:
+# #             var: config.stdout_lines
+# #
+# #         - name: 'Gather config clickhouse'
+# #           ansible.builtin.command: "cat /etc/clickhouse-server/users.xml"
+# #           become: true
+# #           register: config
+# #         - name: 'Output /etc/clickhouse-server/users.xml clickhouse'
+# #           ansible.builtin.debug:
+# #             var: config.stdout_lines
+# #
+# #         - name: 'Gather config clickhouse'
+# #           ansible.builtin.command: "cat /etc/clickhouse-server/users.d/users.xml"
+# #           become: true
+# #           register: config
+# #         - name: 'Output /etc/clickhouse-server/users.d/users.xml clickhouse'
+# #           ansible.builtin.debug:
+# #             var: config.stdout_lines
+#
+#         - name: 'Gather journal clickhouse'
+#           ansible.builtin.command: "journalctl -n 100 -u clickhouse-server.service"
+#           become: true
+#           register: journal
+#         - name: 'Output journal clickhouse'
+#           ansible.builtin.debug:
+#             var: journal.stdout_lines
+#           failed_when: true
+#
+#     - name: install lighthouse
+#       block:
+#         - include_role:
+#             name: ansible_role_lighthouse
+#       rescue:
+#         - name: 'Gather journal nginx'
+#           ansible.builtin.command: "journalctl -n 100 -u nginx.service"
+#           become: true
+#     - name: install vector
+#       block:
+#         - include_role:
+#             name: ansible_role_vector
+#           vars:
+#             role_vector_endpoint_clickhouse_database: "logs"
+#             role_vector_endpoint_clickhouse_table: "test"
+#       rescue:
+#         - name: 'Gather journal vector'
+#           ansible.builtin.command: "journalctl -n 100 -u vector.service"
+#           become: true
+
+  roles:
+    - role: ansible_role_clickhouse
+    - role: ansible_role_lighthouse
+    - role: ansible_role_vector
+  vars:
+    clickhouse_dbs_default:
+      - name: logs
+    clickhouse_networks_default:
+      - "::/0"
+      - "127.0.0.1"
+    clickhouse_version: "22.3.3.44"
+    clickhouse_listen_host_default:
+      - "::"
+    clickhouse_ready_delay: 1
+    role_vector_endpoint_clickhouse_database: "logs"
+    role_vector_endpoint_clickhouse_table: "test"
+
+  post_tasks:
+    - name: Set ClickHose Connection String
+      ansible.builtin.set_fact:
+        clickhouse_connection_string: |
+          clickhouse-client -h 127.0.0.1
+          --port {{ clickhouse_tcp_secure_port | default(clickhouse_tcp_port) }}{{' --secure' if clickhouse_tcp_secure_port is defined else '' }}
+
+    - name: Config | Create table
+      command: |
+        {{ clickhouse_connection_string }}
+        -q 'CREATE TABLE IF NOT EXISTS `{{ role_vector_endpoint_clickhouse_database }}.{{ role_vector_endpoint_clickhouse_table }}`'
+      when: item.state is defined and item.state == 'absent' and item.name in existing_databases.stdout_lines

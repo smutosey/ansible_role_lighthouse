@@ -1,0 +1,16 @@
+---
+roles:
+  - name: nginx
+    src: git@github.com:nginxinc/ansible-role-nginx.git
+    version: "0.24.2"
+    scm: git
+
+  - src: git@github.com:AlexeySetevoi/ansible-clickhouse.git
+    scm: git
+    version: "1.13"
+    name: ansible_role_clickhouse
+
+  - src: git@github.com:smutosey/ansible_role_vector.git
+    scm: git
+    version: "1.0"
+    name: ansible_role_vector
