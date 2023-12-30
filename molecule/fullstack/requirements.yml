@@ -2,7 +2,7 @@
 roles:
   - name: nginx
     src: https://github.com/nginxinc/ansible-role-nginx.git
-    version: "0.24.2"
+    version: "0.24.1"
     scm: git
 
   - src: https://github.com/AlexeySetevoi/ansible-clickhouse.git
