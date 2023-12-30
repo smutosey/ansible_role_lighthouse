@@ -95,7 +95,7 @@
     role_vector_endpoint_clickhouse_table: "test"
 
   post_tasks:
-    - name: Set ClickHose Connection String
+    - name: Set ClickHouse Connection String
       ansible.builtin.set_fact:
         clickhouse_connection_string: |
           clickhouse-client -h 127.0.0.1
