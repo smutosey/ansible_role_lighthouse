@@ -78,8 +78,8 @@
 #           become: true
 
   roles:
-    - role: ansible_role_clickhouse
     - role: ansible_role_lighthouse
+    - role: ansible_role_clickhouse
     - role: ansible_role_vector
   vars:
     clickhouse_dbs_default:
