@@ -5,7 +5,7 @@ dependency:
     requirements-file: molecule/shared/collections.yml
     role-file: molecule/fullstack/requirements.yml
 driver:
-  name: docker
+  name: podman
 lint: |
   set -e
   pwd
