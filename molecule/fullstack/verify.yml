@@ -2,11 +2,11 @@
 - name: Verify
   hosts: fullstack
   tasks:
-    - name: 'Gather Local Services'
+    - name: Gather Local Services
       ansible.builtin.service_facts:
       become: true
 
-    - name: 'Assert Clickhouse Service'
+    - name: Assert Clickhouse Service
       ansible.builtin.assert:
         that:
           - "'{{ clickhouse_service }}' in ansible_facts.services"
@@ -23,17 +23,17 @@
         vector_service: 'vector.service'
         nginx_service: 'nginx.service'
 
-    - name: 'Gather list of existing databases'
+    - name: Gather list of existing databases
       ansible.builtin.command: "clickhouse-client -h 127.0.0.1 --port {{ clickhouse_tcp_port }} -q 'show databases'"
       changed_when: false
       register: databases
       vars:
         clickhouse_tcp_port: 9000
 
-    - name: 'Assert Test Databases'
+    - name: Assert Test Databases
       ansible.builtin.assert:
         that:
-          - 'logs' in databases.stdout
+          - "'logs' in databases.stdout"
 
     - name: Check Vector API (GET /health status 200)
       ansible.builtin.uri:
