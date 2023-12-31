@@ -40,3 +40,7 @@
         url: "http://0.0.0.0:{{ role_vector_port }}/health"
       vars:
         role_vector_port: 8686
+
+    - name: Check Lighthouse (GET status 200)
+      ansible.builtin.uri:
+        url: "http://0.0.0.0:80"

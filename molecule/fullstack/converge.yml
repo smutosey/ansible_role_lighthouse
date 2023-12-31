@@ -1,10 +1,9 @@
-- name: Converge
+- name: Converge Clickhouse + Lighthouse
   hosts: fullstack
   gather_facts: true
   roles:
     - role: ansible_role_clickhouse
     - role: ansible_role_lighthouse
-    - role: ansible_role_vector
   vars:
     clickhouse_dbs_default:
       - name: logs
@@ -15,19 +14,18 @@
     clickhouse_listen_host_default:
       - "::"
     clickhouse_ready_delay: 1
+  post_tasks:
+    - name: Config | Create table
+      command: |
+        clickhouse-client -h 127.0.0.1 --port 9000
+        -q 'CREATE TABLE IF NOT EXISTS `{{ role_vector_endpoint_clickhouse_database }}.{{ role_vector_endpoint_clickhouse_table }} (message String) ENGINE=MergeTree()`'
+
+- name: Converge Vector
+  hosts: fullstack
+  gather_facts: true
+  roles:
+    - role: ansible_role_vector
+  vars:
     role_vector_endpoint_clickhouse_database: "logs"
     role_vector_endpoint_clickhouse_table: "test"
     role_vector_groups: ["sys"]
-
-  post_tasks:
-    - name: Set ClickHouse Connection String
-      ansible.builtin.set_fact:
-        clickhouse_connection_string: |
-          clickhouse-client -h 127.0.0.1
-          --port {{ clickhouse_tcp_secure_port | default(clickhouse_tcp_port) }}{{' --secure' if clickhouse_tcp_secure_port is defined else '' }}
-
-    - name: Config | Create table
-      command: |
-        {{ clickhouse_connection_string }}
-        -q 'CREATE TABLE IF NOT EXISTS `{{ role_vector_endpoint_clickhouse_database }}.{{ role_vector_endpoint_clickhouse_table }}`'
-      when: item.state is defined and item.state == 'absent' and item.name in existing_databases.stdout_lines
