@@ -21,7 +21,7 @@
       command: |
         clickhouse-client -h 127.0.0.1 --port 9000
         -q 'CREATE TABLE IF NOT EXISTS logs.test (message String) ENGINE = Log()'
-      when: "'test' in existing_databases.stdout_lines"
+      when: "'test' not in existing_databases.stdout_lines"
 
 - name: Converge Vector
   hosts: fullstack
