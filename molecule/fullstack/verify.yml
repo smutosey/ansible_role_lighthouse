@@ -57,4 +57,4 @@
     - name: Assert log lines exists
       ansible.builtin.assert:
         that:
-          - "test_logs.stdout != ''
+          - "test_logs.stdout != ''"
