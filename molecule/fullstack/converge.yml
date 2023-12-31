@@ -18,7 +18,7 @@
     - name: Config | Create table
       command: |
         clickhouse-client -h 127.0.0.1 --port 9000
-        -q 'CREATE TABLE IF NOT EXISTS `{{ role_vector_endpoint_clickhouse_database }}.{{ role_vector_endpoint_clickhouse_table }} (message String) ENGINE = MergeTree()`'
+        -q 'CREATE TABLE IF NOT EXISTS {{ role_vector_endpoint_clickhouse_database }}.{{ role_vector_endpoint_clickhouse_table }} (message String) ENGINE = MergeTree()'
       vars:
         role_vector_endpoint_clickhouse_database: "logs"
         role_vector_endpoint_clickhouse_table: "test"
