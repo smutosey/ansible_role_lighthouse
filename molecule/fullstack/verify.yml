@@ -50,11 +50,11 @@
       changed_when: false
       register: test_logs
 
-    - name: Output logs
+    - name: Output logs in Clickhouse DB received from Vector
       ansible.builtin.debug:
-        var: test_logs
+        var: test_logs.stdout_lines
 
     - name: Assert log lines exists
       ansible.builtin.assert:
         that:
-          - "test_logs.stdout != None"
+          - "test_logs.stdout != ''
