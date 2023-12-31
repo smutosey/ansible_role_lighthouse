@@ -5,7 +5,8 @@ galaxy_info:
   description: Ansible Role for Lighthouse installation
   license: MIT
   min_ansible_version: "2.11"
-
+  platforms:
+    - name: Ubuntu
 
 dependencies:
   - name: nginx
