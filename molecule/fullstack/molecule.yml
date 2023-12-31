@@ -8,8 +8,6 @@ driver:
   name: podman
 lint: |
   set -e
-  pwd
-  ls -lha
   ansible-lint . --exclude ./.tox/ --exclude ./.git/
 platforms:
 
