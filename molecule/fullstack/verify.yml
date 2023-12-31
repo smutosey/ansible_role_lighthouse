@@ -9,13 +9,13 @@
     - name: Assert Clickhouse Service
       ansible.builtin.assert:
         that:
-          - "'{{ clickhouse_service }}' in ansible_facts.services"
+          - "clickhouse_service in ansible_facts.services"
           - "'running' == ansible_facts.services[clickhouse_service].state"
           - "'enabled' == ansible_facts.services[clickhouse_service].status"
-          - "'{{ vector_service }}' in ansible_facts.services"
+          - "vector_service in ansible_facts.services"
           - "'running' == ansible_facts.services[vector_service].state"
           - "'enabled' == ansible_facts.services[vector_service].status"
-          - "'{{ nginx_service }}' in ansible_facts.services"
+          - "'nginx_service in ansible_facts.services"
           - "'running' == ansible_facts.services[nginx_service].state"
           - "'enabled' == ansible_facts.services[nginx_service].status"
       vars:
@@ -50,7 +50,11 @@
       changed_when: false
       register: test_logs
 
+    - name: Output logs
+      ansible.builtin.debug:
+        var: test_logs
+
     - name: Assert log lines exists
       ansible.builtin.assert:
         that:
-          - "test_logs.output != None"
+          - "test_logs.stdout != None"
