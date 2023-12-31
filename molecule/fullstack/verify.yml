@@ -44,3 +44,13 @@
     - name: Check Lighthouse (GET status 200)
       ansible.builtin.uri:
         url: "http://0.0.0.0:80"
+
+    - name: Check logs in db
+      ansible.builtin.command: "clickhouse-client -h 127.0.0.1 --port 9000 -q 'select * from logs.test'"
+      changed_when: false
+      register: test_logs
+
+    - name: Assert log lines exists
+      ansible.builtin.assert:
+        that:
+          - "test_logs.output != None"

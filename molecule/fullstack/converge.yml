@@ -10,18 +10,13 @@
     clickhouse_networks_default:
       - "::/0"
       - "127.0.0.1"
+    clickhouse_listen_host_default: ["::"]
     clickhouse_version: "22.3.3.44"
-    clickhouse_listen_host_default:
-      - "::"
-    clickhouse_ready_delay: 1
   post_tasks:
     - name: Config | Create table
       command: |
         clickhouse-client -h 127.0.0.1 --port 9000
-        -q 'CREATE TABLE IF NOT EXISTS {{ role_vector_endpoint_clickhouse_database }}.{{ role_vector_endpoint_clickhouse_table }} (message String) ENGINE = Log()'
-      vars:
-        role_vector_endpoint_clickhouse_database: "logs"
-        role_vector_endpoint_clickhouse_table: "test"
+        -q 'CREATE TABLE IF NOT EXISTS logs.test (message String) ENGINE = Log()'
 
 - name: Converge Vector
   hosts: fullstack
