@@ -17,6 +17,9 @@
       command: "clickhouse-client -h 127.0.0.1 --port 9000 -q 'SHOW tables FROM logs'"
       changed_when: false
       register: existing_tables
+    - name: Extra Config | debug tables list
+      ansible.builtin.debug:
+        var: existing_tables
     - name: Extra Config | Create table if not exists
       command: |
         clickhouse-client -h 127.0.0.1 --port 9000
