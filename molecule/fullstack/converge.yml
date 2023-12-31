@@ -17,6 +17,7 @@
     clickhouse_ready_delay: 1
     role_vector_endpoint_clickhouse_database: "logs"
     role_vector_endpoint_clickhouse_table: "test"
+    role_vector_groups: ["sys"]
 
   post_tasks:
     - name: Set ClickHouse Connection String
